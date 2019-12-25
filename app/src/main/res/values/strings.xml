@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">MovieDBProject</string>
+
+    <!--Login fragment-->
+    <string name="login">Login</string>
+    <string name="login_username">Enter your username</string>
+    <string name="login_password">Enter your password</string>
+
+    <!--FragmentNavigation-->
+    <string name="back_button_press">Please click BACK again to exit!</string>
+
+    <!--Menu xml-->
+    <string name="menu_profile">Profile</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_favourites">Favourites</string>
+    <string name="menu_now_in_cinema">Now in cinemas</string>
+
+    <!--Search bar-->
+    <string name="search_title">Search</string>
+    <string name="search_hint">Enter title</string>
+
+
+</resources>

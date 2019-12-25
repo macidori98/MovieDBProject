@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_profile"
+        android:enabled="true"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/menu_profile"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_home"
+        android:enabled="true"
+        android:icon="@drawable/home"
+        android:title="@string/menu_home"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_favourite"
+        android:enabled="true"
+        android:icon="@drawable/favourite"
+        android:title="@string/menu_favourites"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_now_in_cinemas"
+        android:enabled="true"
+        android:icon="@drawable/nowncinema"
+        android:title="@string/menu_now_in_cinema"
+        app:showAsAction="ifRoom" />
+
+</menu>
