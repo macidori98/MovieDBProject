@@ -5,6 +5,8 @@
     <string name="login">Login</string>
     <string name="login_username">Enter your username</string>
     <string name="login_password">Enter your password</string>
+    <string name="login_fail_query_retrofit">Retrofit query failure</string>
+    <string name="login_fail_no_internet">No internet connection</string>
 
     <!--FragmentNavigation-->
     <string name="back_button_press">Please click BACK again to exit!</string>
