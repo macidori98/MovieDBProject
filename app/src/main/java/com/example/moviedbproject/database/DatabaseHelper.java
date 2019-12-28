@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.moviedbproject.database.model.Image;
 import com.example.moviedbproject.database.model.User;
+import com.example.moviedbproject.utils.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +27,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(User.CREATE_TABLE);
+        sqLiteDatabase.execSQL(Image.CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + User.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Image.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 
@@ -51,6 +55,51 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // return newly inserted row id
         return id;
+    }
+
+    public long insertImage(String name, byte[] image){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(Image.COLUMN_NAME, name);
+        cv.put(Image.COLUMN_USER_ID, Constant.CURRENT_USER.getId());
+        cv.put(Image.COLUMN_IMAGE, image);
+        long id = db.insert(Image.TABLE_NAME, null, cv);
+        db.close();
+        return id;
+    }
+
+    public int updateImage(Image image){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Image.COLUMN_ID, image.getId());
+        values.put(Image.COLUMN_NAME, image.getName());
+        values.put(Image.COLUMN_USER_ID, image.getUserId());
+        values.put(Image.COLUMN_IMAGE, image.getImage());
+
+        return db.update(Image.TABLE_NAME,values, User.COLUMN_ID+ " = ?",
+                new String[]{String.valueOf(image.getId())});
+    }
+
+    public Image getImage(long id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(Image.TABLE_NAME,
+                new String[]{Image.COLUMN_ID, Image.COLUMN_NAME, Image.COLUMN_USER_ID, Image.COLUMN_IMAGE},
+                Image.COLUMN_ID + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        if (cursor.getCount() <= 0)
+                return null;
+
+        byte[] image1 = null;//cursor.getBlob(1);
+        long lId = cursor.getLong(cursor.getColumnIndex(Image.COLUMN_ID));
+        String sName = cursor.getString(cursor.getColumnIndex(Image.COLUMN_NAME));
+        int iUserId = cursor.getInt(cursor.getColumnIndex(Image.COLUMN_USER_ID));
+        Image image = new Image(lId, sName, iUserId, image1);
+        cursor.close();
+        return image;
     }
 
     public int updateUser(User user){
