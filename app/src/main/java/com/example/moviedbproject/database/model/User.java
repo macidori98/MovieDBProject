@@ -6,17 +6,15 @@ public class User {
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_USERNAME = "username";
     public static final String COLUMN_PASSWORD = "password";
-
-    private int id;
-    private String username;
-    private String password;
-
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + "("
                     + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                     + COLUMN_USERNAME + " TEXT,"
                     + COLUMN_PASSWORD + " TEXT"
                     + ")";
+    private int id;
+    private String username;
+    private String password;
 
     public User(int id, String username, String password) {
         this.username = username;
@@ -24,7 +22,8 @@ public class User {
         this.id = id;
     }
 
-    public User(){}
+    public User() {
+    }
 
     public String getUsername() {
         return username;

@@ -2,7 +2,6 @@ package com.example.moviedbproject.fragment;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.moviedbproject.interfaces.Service;
+import com.example.moviedbproject.R;
 import com.example.moviedbproject.database.DatabaseHelper;
 import com.example.moviedbproject.database.model.User;
-import com.example.moviedbproject.R;
+import com.example.moviedbproject.interfaces.Service;
+import com.example.moviedbproject.tmdb.NetworkConnection;
 import com.example.moviedbproject.tmdb.model.NewToken;
 import com.example.moviedbproject.utils.Constant;
 import com.example.moviedbproject.utils.FragmentNavigation;
-import com.example.moviedbproject.tmdb.NetworkConnection;
 
 import java.util.List;
 
@@ -53,7 +52,33 @@ public class LoginFragment extends Fragment {
         myAsyncTask.execute();
     }
 
-    private class MyAsyncTask extends AsyncTask<Void, Void, Void>{
+    private void initializeElements(View view) {
+        etPassword = view.findViewById(R.id.editText_login_password);
+        etUsername = view.findViewById(R.id.editText_login_username);
+        btnLogin = view.findViewById(R.id.button_login);
+        db = new DatabaseHelper(getContext());
+    }
+
+    private boolean doesUserExist() {
+        List<User> userList = db.getAllUsers();
+        for (User user : userList) {
+            if (user.getUsername().equals(etUsername.getText().toString()) &&
+                    user.getPassword().equals(etPassword.getText().toString())) {
+                Constant.CURRENT_USER = user;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void registerUser() {
+        long id = db.insertUser(etUsername.getText().toString(), etPassword.getText().toString());
+        User user = db.getUser(id);
+        Constant.CURRENT_USER = user;
+        FragmentNavigation.getInstance(getContext()).replaceFragment(new HomeFragment(), R.id.fragment_content);
+    }
+
+    private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPostExecute(Void aVoid) {
@@ -61,7 +86,7 @@ public class LoginFragment extends Fragment {
             btnLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (doesUserExist()){
+                    if (doesUserExist()) {
                         FragmentNavigation.getInstance(getContext()).replaceFragment(new HomeFragment(), R.id.fragment_content);
                     } else {
                         registerUser();
@@ -69,7 +94,7 @@ public class LoginFragment extends Fragment {
                 }
             });
         }
-        
+
         @Override
         protected Void doInBackground(Void... voids) {
             Retrofit retrofit = NetworkConnection.getRetrofitClient();
@@ -79,13 +104,13 @@ public class LoginFragment extends Fragment {
             call.enqueue(new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) {
-                    if (response.code()==Constant.GET_SUCCESS_CODE){
+                    if (response.code() == Constant.GET_SUCCESS_CODE) {
                         NewToken newToken = (NewToken) response.body();
                         Constant.CURRENT_TOKEN = newToken.getRequest_token();
                     } else {
                         Toast.makeText(getContext(), R.string.login_fail_query_retrofit, Toast.LENGTH_SHORT).show();
                     }
-                    
+
                 }
 
                 @Override
@@ -95,31 +120,5 @@ public class LoginFragment extends Fragment {
             });
             return null;
         }
-    }
-
-    private void initializeElements(View view){
-        etPassword = view.findViewById(R.id.editText_login_password);
-        etUsername = view.findViewById(R.id.editText_login_username);
-        btnLogin = view.findViewById(R.id.button_login);
-        db = new DatabaseHelper(getContext());
-    }
-
-    private boolean doesUserExist(){
-        List<User> userList = db.getAllUsers();
-        for (User user : userList) {
-            if (user.getUsername().equals(etUsername.getText().toString()) &&
-                    user.getPassword().equals(etPassword.getText().toString())){
-                Constant.CURRENT_USER = user;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void registerUser(){
-        long id = db.insertUser(etUsername.getText().toString(), etPassword.getText().toString());
-        User user = db.getUser(id);
-        Constant.CURRENT_USER = user;
-        FragmentNavigation.getInstance(getContext()).replaceFragment(new HomeFragment(), R.id.fragment_content);
     }
 }

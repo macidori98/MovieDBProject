@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.moviedbproject.R;
 import com.example.moviedbproject.fragment.dialog.DetailDialog;
+import com.example.moviedbproject.fragment.dialog.OriginalSizeCoverPhotoDialog;
 import com.example.moviedbproject.tmdb.model.Movies;
 import com.example.moviedbproject.utils.Constant;
 
@@ -25,7 +26,7 @@ public class HomeViewRecyclerViewAdapter extends RecyclerView.Adapter<HomeViewRe
     private FragmentManager fragmentManager;
     private List<Movies> moviesList;
 
-    public HomeViewRecyclerViewAdapter(Context context, List<Movies> moviesList, FragmentManager man){
+    public HomeViewRecyclerViewAdapter(Context context, List<Movies> moviesList, FragmentManager man) {
         this.context = context;
         this.fragmentManager = man;
         this.moviesList = moviesList;
@@ -42,14 +43,21 @@ public class HomeViewRecyclerViewAdapter extends RecyclerView.Adapter<HomeViewRe
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.tvTitle.setText(moviesList.get(position).getTitle());
         holder.tvDescription.setText(moviesList.get(position).getOverview());
-        String URL = Constant.BASE_URL_IMAGE.concat(moviesList.get(position).getPoster_path());
+        String URL = Constant.BASE_URL_IMAGE.concat("w185").concat(moviesList.get(position).getPoster_path());
         Glide.with(context).load(URL).into(holder.imgCoverPhoto);
         final int index = position;
         holder.tvMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DetailDialog detailDialog = new DetailDialog(moviesList.get(index).getTitle(),moviesList.get(index).getOverview());
+                DetailDialog detailDialog = new DetailDialog(moviesList.get(index).getTitle(), moviesList.get(index).getOverview());
                 detailDialog.show(fragmentManager, Constant.DETAIL_DIALOG_TAG);
+            }
+        });
+        holder.imgCoverPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OriginalSizeCoverPhotoDialog originalSizeCoverPhotoDialog = new OriginalSizeCoverPhotoDialog(Constant.BASE_URL_IMAGE.concat("original").concat(moviesList.get(index).getPoster_path()));
+                originalSizeCoverPhotoDialog.show(fragmentManager, Constant.ORIGINAL_COVER_DIALOG_TAG);
             }
         });
     }
@@ -59,7 +67,7 @@ public class HomeViewRecyclerViewAdapter extends RecyclerView.Adapter<HomeViewRe
         return moviesList.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView imgCoverPhoto;
         public TextView tvTitle, tvDescription, tvMore;

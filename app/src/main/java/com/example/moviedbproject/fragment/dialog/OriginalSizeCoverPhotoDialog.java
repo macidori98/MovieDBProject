@@ -7,22 +7,23 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import com.bumptech.glide.Glide;
 import com.example.moviedbproject.R;
 import com.example.moviedbproject.utils.Constant;
 
-public class DetailDialog extends AppCompatDialogFragment {
-    private String sDescription, sTitle;
-    private TextView tvDescription;
 
-    public DetailDialog(String sTitle, String sDescription) {
-        this.sDescription = sDescription;
-        this.sTitle = sTitle;
+public class OriginalSizeCoverPhotoDialog extends AppCompatDialogFragment {
+    private String URL;
+    private ImageView imgOriginalCoverPhoto;
+
+    public OriginalSizeCoverPhotoDialog(String URL) {
+        this.URL = URL;
     }
 
     @NonNull
@@ -30,19 +31,23 @@ public class DetailDialog extends AppCompatDialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_detail_description, null);
-        tvDescription = view.findViewById(R.id.textView_dialog_detail_description);
-        tvDescription.setText(sDescription);
+        View view = inflater.inflate(R.layout.original_size_cover_photo, null);
+        imgOriginalCoverPhoto = view.findViewById(R.id.imageView_original_size_cover_photo);
+        Glide.with(getActivity())
+                .load(URL)
+                .placeholder(R.drawable.loading)
+                .fitCenter()
+                .into(imgOriginalCoverPhoto);
         insertDescription(builder, view);
         return builder.create();
     }
 
     private void insertDescription(AlertDialog.Builder builder, View view) {
-        builder.setView(view).setTitle(Constant.DESCRIPTION + (sTitle))
+        builder.setView(view).setTitle(Constant.ORIGINAL_COVER)
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Log.d(Constant.CANCEL_DESCRIPTION, Constant.CANCEL_DESCRIPTION);
+                        Log.d(Constant.CANCEL_ORIGINAL_COVER, Constant.CANCEL_ORIGINAL_COVER);
                     }
                 });
     }

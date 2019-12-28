@@ -18,7 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Database Name
     private static final String DATABASE_NAME = "movies_db";
 
-    public DatabaseHelper(Context context){
+    public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -53,13 +53,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    public User getUser(long id){
+    public User getUser(long id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(User.TABLE_NAME,
                 new String[]{User.COLUMN_ID, User.COLUMN_USERNAME, User.COLUMN_PASSWORD},
                 User.COLUMN_ID + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
-        if (cursor != null){
+        if (cursor != null) {
             cursor.moveToFirst();
         }
 
@@ -77,8 +77,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String selectQuery = "SELECT * FROM " + User.TABLE_NAME;
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()){
-            do{
+        if (cursor.moveToFirst()) {
+            do {
                 User user = new User();
                 user.setId(cursor.getInt(cursor.getColumnIndex(User.COLUMN_ID)));
                 user.setUsername(cursor.getString(cursor.getColumnIndex(User.COLUMN_USERNAME)));

@@ -1,26 +1,19 @@
 package com.example.moviedbproject.fragment;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.moviedbproject.R;
 import com.example.moviedbproject.adapter.ScreenSlidePagerAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import static android.content.Context.SEARCH_SERVICE;
 
 public class HomeFragment extends Fragment {
     public static final String TAG = HomeFragment.class.getSimpleName();
@@ -45,17 +38,17 @@ public class HomeFragment extends Fragment {
         setupBottomNavigation();
     }
 
-    private void setupViewPager(){
+    private void setupViewPager() {
         viewPager.setAdapter(new ScreenSlidePagerAdapter(getChildFragmentManager()));
         viewPager.setOnPageChangeListener(new PageChange());
         viewPager.setCurrentItem(1);
     }
 
-    private void setupBottomNavigation(){
+    private void setupBottomNavigation() {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.action_home:
                         viewPager.setCurrentItem(1);
                         return true;
@@ -74,7 +67,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    public class PageChange implements ViewPager.OnPageChangeListener{
+    public class PageChange implements ViewPager.OnPageChangeListener {
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

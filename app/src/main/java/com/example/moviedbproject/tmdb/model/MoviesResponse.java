@@ -10,7 +10,8 @@ public class MoviesResponse {
     private long total_pages;
     private List<Movies> results = new ArrayList<>();
 
-    public MoviesResponse(){}
+    public MoviesResponse() {
+    }
 
     public MoviesResponse(long page, long total_results, long total_pages, List<Movies> results) {
         this.page = page;

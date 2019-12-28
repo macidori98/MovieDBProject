@@ -9,20 +9,20 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.moviedbproject.fragment.LoginFragment;
 import com.example.moviedbproject.MainActivity;
 import com.example.moviedbproject.R;
+import com.example.moviedbproject.fragment.LoginFragment;
 
-public class FragmentNavigation extends Fragment{
+public class FragmentNavigation extends Fragment {
     public final static String TAG = FragmentNavigation.class.getSimpleName();
 
     private static FragmentNavigation sInstance;
     private static FragmentManager mFragmentManager;
     private static FragmentTransaction mFragmentTransaction;
     private static Handler mHandler = new Handler();
-    private Activity act;
     private static int mMainActivityFragmentContainer;
     private static boolean mDoubleBackToExitPressedOnce = false;
+    private Activity act;
 
     public static FragmentNavigation getInstance(Context context) {
 
@@ -70,7 +70,7 @@ public class FragmentNavigation extends Fragment{
     public void onBackPressed(MainActivity activity) {
 
         // If Home page is open: double press exit:
-        if( getCurrentFragment(mMainActivityFragmentContainer) instanceof LoginFragment) {
+        if (getCurrentFragment(mMainActivityFragmentContainer) instanceof LoginFragment) {
             doublePressExit(activity);
             return;
         }

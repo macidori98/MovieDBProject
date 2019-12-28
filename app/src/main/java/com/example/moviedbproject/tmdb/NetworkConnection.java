@@ -7,6 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkConnection {
     public static Retrofit retrofit;
+
     /*
     This public static method will return Retrofit client
     anywhere in the appplication
