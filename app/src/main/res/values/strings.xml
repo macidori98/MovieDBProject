@@ -21,5 +21,9 @@
     <string name="search_title">Search</string>
     <string name="search_hint">Enter title</string>
 
+    <!--Home view fragment-->
+    <string name="more">more...</string>
+
+    <string name="cancel">Cancel</string>
 
 </resources>
