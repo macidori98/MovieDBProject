@@ -53,6 +53,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
+    public int updateUser(User user){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(User.COLUMN_ID, user.getId());
+        values.put(User.COLUMN_PASSWORD, user.getPassword());
+        values.put(User.COLUMN_USERNAME, user.getUsername());
+
+        return db.update(User.TABLE_NAME,values, User.COLUMN_ID+ " = ?",
+                new String[]{String.valueOf(user.getId())});
+    }
+
     public User getUser(long id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(User.TABLE_NAME,

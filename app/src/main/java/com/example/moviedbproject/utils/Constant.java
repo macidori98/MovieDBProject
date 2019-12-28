@@ -10,6 +10,7 @@ public class Constant {
     public static final int GET_SUCCESS_CODE = 200;
     public static final int POST_SUCCESS_CODE = 201;
     public static final String DETAIL_DIALOG_TAG = "Detail Dialog";
+    public static final String CHANGE_PASSWORD_DIALOG_TAG = "Detail Dialog";
     public static final String ORIGINAL_COVER_DIALOG_TAG = "Original Cover Dialog";
     public static final String CANCEL_DESCRIPTION = "CANCEL DESCRIPTION";
     public static final String CANCEL_ORIGINAL_COVER = "CANCEL ORIGINAL COVER";

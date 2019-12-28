@@ -23,7 +23,22 @@
 
     <!--Home view fragment-->
     <string name="more">more...</string>
-
+    <string name="home_view_fragment_character">You have to enter at least one character</string>
     <string name="cancel">Cancel</string>
+
+    <!--Profile fragment-->
+    <string name="profile_fragment_change_password">Change password</string>
+    <string name="profile_fragment_change_profile_photo">Change profile photo</string>
+
+    <!--Change password dialog-->
+    <string name="change_password_dialog_old_password">Enter old password</string>
+    <string name="change_password_dialog_new_password">Enter new password</string>
+    <string name="change_password_dialog_confirm_new_password">Confirm new password</string>
+    <string name="change_password_dialog_title">Change password</string>
+    <string name="change_password_dialog_old_new_password_match">Enter a new password</string>
+    <string name="change_password_dialog_new_confirm_new_passwords_dont_match">The passwords do not match</string>
+    <string name="change_password_dialog_successful">Your password has been changed</string>
+    <string name="change_password_dialog_characters">You have to enter at least 5 characters</string>
+    <string name="confirm">Confirm</string>
 
 </resources>

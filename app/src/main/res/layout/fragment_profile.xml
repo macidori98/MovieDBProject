@@ -1,13 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/imageView_profile_fragment_image"
+        android:layout_width="@dimen/dp150"
+        android:layout_height="@dimen/dp150"
+        android:layout_marginTop="72dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/blue" />
+
+    <Button
+        android:id="@+id/button_profile_fragment_change_password"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="this is sparta"
-        android:textSize="@dimen/sp50" />
-</LinearLayout>
+        android:layout_marginTop="124dp"
+        android:text="@string/profile_fragment_change_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_profile_fragment_image" />
+
+    <Button
+        android:id="@+id/button_profile_fragment_change_profile_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="@string/profile_fragment_change_profile_photo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_profile_fragment_change_password" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -63,7 +63,7 @@ public class HomeViewFragment extends Fragment {
                     SearchedMoviesAsyncTask searchedMoviesAsyncTask = new SearchedMoviesAsyncTask(1, etSearchText.getText().toString());
                     searchedMoviesAsyncTask.execute();
                 } else {
-                    Toast.makeText(getContext(), "You have to enter at least one character", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.home_view_fragment_character, Toast.LENGTH_SHORT).show();
                 }
             }
         });
