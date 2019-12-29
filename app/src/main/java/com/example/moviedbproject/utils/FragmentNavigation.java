@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.moviedbproject.MainActivity;
 import com.example.moviedbproject.R;
 import com.example.moviedbproject.fragment.LoginFragment;
+import com.example.moviedbproject.fragment.RegistrationFragment;
 
 public class FragmentNavigation extends Fragment {
     public final static String TAG = FragmentNavigation.class.getSimpleName();
@@ -75,11 +76,11 @@ public class FragmentNavigation extends Fragment {
             return;
         }
 
-        /*if( getCurrentFragment(mMainActivityFragmentContainer) instanceof AdminHomePageFragment) {
+        if( getCurrentFragment(mMainActivityFragmentContainer) instanceof RegistrationFragment) {
             popBackstack();
             return;
         }
-
+/*
         if( getCurrentFragment(mMainActivityFragmentContainer) instanceof AdminGroupQuestionFragment) {
             popBackstack();
             return;

@@ -2,8 +2,10 @@ package com.example.moviedbproject.interfaces;
 
 import com.example.moviedbproject.tmdb.model.MoviesResponse;
 import com.example.moviedbproject.tmdb.model.NewToken;
+import com.example.moviedbproject.tmdb.model.VideoResponse;
 
 import retrofit2.Call;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
@@ -21,4 +23,8 @@ public interface Service {
     Call<MoviesResponse> getSearchedMovies(@Query("api_key") String api_key, @Query("language") String language,
                                            @Query("query") String query, @Query("page") String page,
                                            @Query("include_adult") String include_adult);
+
+    @GET("3/movie/{movie_id}/videos")
+    Call<VideoResponse> getMovieVideo(@Field("movie_id") String movie_id, @Query("api_key") String api_key,
+                                      @Query("language") String language);
 }

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,7 @@ public class LoginFragment extends Fragment {
     private EditText etUsername, etPassword;
     private Button btnLogin;
     private DatabaseHelper db;
+    private TextView tvRegistration;
 
     @Nullable
     @Override
@@ -57,6 +59,7 @@ public class LoginFragment extends Fragment {
         etUsername = view.findViewById(R.id.editText_login_username);
         btnLogin = view.findViewById(R.id.button_login);
         db = new DatabaseHelper(getContext());
+        tvRegistration = view.findViewById(R.id.textView_login_registration);
     }
 
     private boolean doesUserExist() {
@@ -71,25 +74,24 @@ public class LoginFragment extends Fragment {
         return false;
     }
 
-    private void registerUser() {
-        long id = db.insertUser(etUsername.getText().toString(), etPassword.getText().toString());
-        User user = db.getUser(id);
-        Constant.CURRENT_USER = user;
-        FragmentNavigation.getInstance(getContext()).replaceFragment(new HomeFragment(), R.id.fragment_content);
-    }
-
     private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            tvRegistration.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FragmentNavigation.getInstance(getContext()).replaceFragment(new RegistrationFragment(), R.id.fragment_content);
+                }
+            });
             btnLogin.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (doesUserExist()) {
                         FragmentNavigation.getInstance(getContext()).replaceFragment(new HomeFragment(), R.id.fragment_content);
                     } else {
-                        registerUser();
+                        Toast.makeText(getContext(), "User does not exist", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -110,7 +112,6 @@ public class LoginFragment extends Fragment {
                     } else {
                         Toast.makeText(getContext(), R.string.login_fail_query_retrofit, Toast.LENGTH_SHORT).show();
                     }
-
                 }
 
                 @Override

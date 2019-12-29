@@ -41,4 +41,16 @@
     <string name="change_password_dialog_characters">You have to enter at least 5 characters</string>
     <string name="confirm">Confirm</string>
 
+    <!--Registration fragment-->
+    <string name="reg_username">Enter your username</string>
+    <string name="reg_password">Enter your password</string>
+    <string name="reg_confirm_password">Confirm your password</string>
+    <string name="reg_button">Registration</string>
+    <string name="reg_user_already_exists">User already exists</string>
+    <string name="reg_user_created">User created</string>
+    <string name="reg_select_user_type">Select an user type</string>
+    <string name="reg_password_dont_match">Inserted passwords do not match</string>
+    <string name="reg_characters_fail">You have to enter between 6 and 20 characters</string>
+    <string name="fail">User already exists</string>
+
 </resources>
