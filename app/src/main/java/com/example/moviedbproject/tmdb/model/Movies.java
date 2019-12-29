@@ -18,7 +18,8 @@ public class Movies {
     private String overview;
     private String release_date;
 
-    public Movies(){}
+    public Movies() {
+    }
 
     public Movies(double popularity, long vote_count, boolean video, String poster_path, long id, boolean adult, String backdrop_path, String original_language, String original_title, List<Integer> genre_ids, String title, float vote_average, String overview, String release_date) {
         this.popularity = popularity;

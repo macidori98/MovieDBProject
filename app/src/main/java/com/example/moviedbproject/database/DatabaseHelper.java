@@ -12,7 +12,6 @@ import com.example.moviedbproject.database.model.User;
 import com.example.moviedbproject.tmdb.model.Movies;
 import com.example.moviedbproject.utils.Constant;
 
-import java.nio.file.attribute.FileAttributeView;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    public long insertFavouriteMovie(Movies movie){
+    public long insertFavouriteMovie(Movies movie) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -90,12 +89,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteFavouriteMovie(Movies movie) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(FavouriteMovies.TABLE_NAME, FavouriteMovies.COLUMN_MOVIE_ID + " = ? AND "
-                + FavouriteMovies.COLUMN_USER_ID + " = ?",
+                        + FavouriteMovies.COLUMN_USER_ID + " = ?",
                 new String[]{String.valueOf(movie.getId()), String.valueOf(Constant.CURRENT_USER.getId())});
         db.close();
     }
 
-    public long insertImage(String name, byte[] image){
+    public long insertImage(String name, byte[] image) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(Image.COLUMN_NAME, name);
@@ -106,7 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return id;
     }
 
-    public int updateImage(Image image){
+    public int updateImage(Image image) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -115,7 +114,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(Image.COLUMN_USER_ID, image.getUserId());
         values.put(Image.COLUMN_IMAGE, image.getImage());
 
-        return db.update(Image.TABLE_NAME,values, User.COLUMN_ID+ " = ?",
+        return db.update(Image.TABLE_NAME, values, User.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(image.getId())});
     }
 
@@ -129,7 +128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
         if (cursor.getCount() <= 0)
-                return null;
+            return null;
 
         byte[] image1 = null;//cursor.getBlob(1);
         long lId = cursor.getLong(cursor.getColumnIndex(Image.COLUMN_ID));
@@ -140,7 +139,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return image;
     }
 
-    public int updateUser(User user){
+    public int updateUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -148,7 +147,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(User.COLUMN_PASSWORD, user.getPassword());
         values.put(User.COLUMN_USERNAME, user.getUsername());
 
-        return db.update(User.TABLE_NAME,values, User.COLUMN_ID+ " = ?",
+        return db.update(User.TABLE_NAME, values, User.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(user.getId())});
     }
 
@@ -171,14 +170,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return user;
     }
 
-    public boolean isUsersFavMovie(Movies movie){
+    public boolean isUsersFavMovie(Movies movie) {
         SQLiteDatabase db = this.getWritableDatabase();
         String selectQuery = "SELECT * FROM " + FavouriteMovies.TABLE_NAME + " WHERE "
                 + FavouriteMovies.COLUMN_USER_ID + " = " + String.valueOf(Constant.CURRENT_USER.getId())
                 + " AND " + FavouriteMovies.COLUMN_MOVIE_ID + " = " + String.valueOf(movie.getId());
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        if(cursor.getCount() <= 0) {
+        if (cursor.getCount() <= 0) {
             db.close();
             return false;
         }
@@ -186,7 +185,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    public List<Movies> getUserFavMovies(){
+    public Movies getUsersFavMovieSearch(String title) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "SELECT * FROM " + FavouriteMovies.TABLE_NAME + " WHERE "
+                + FavouriteMovies.COLUMN_USER_ID + " = " + String.valueOf(Constant.CURRENT_USER.getId())
+                + " AND lower(" + FavouriteMovies.COLUMN_TITLE + ") = '" + title.toLowerCase() + "'";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+        } else {
+            db.close();
+            return null;
+        }
+        if (cursor.getCount() <= 0) {
+            db.close();
+            return null;
+        }
+        Movies movie = new Movies();
+        movie.setPopularity(cursor.getDouble(cursor.getColumnIndex(FavouriteMovies.COLUMN_POPULARITY)));
+        movie.setVote_count(cursor.getLong(cursor.getColumnIndex(FavouriteMovies.COLUMN_VOTE_COUNT)));
+        movie.setVideo(false);
+        movie.setPoster_path(cursor.getString(cursor.getColumnIndex(FavouriteMovies.COLUMN_POSTER_PATH)));
+        movie.setId(cursor.getLong(cursor.getColumnIndex(FavouriteMovies.COLUMN_MOVIE_ID)));
+        movie.setAdult(false);
+        movie.setBackdrop_path(cursor.getString(cursor.getColumnIndex(FavouriteMovies.COLUMN_BACKDROP_PATH)));
+        movie.setOriginal_language(cursor.getString(cursor.getColumnIndex(FavouriteMovies.COLUMN_ORIGINAL_LANGUAGE)));
+        movie.setOriginal_title(cursor.getString(cursor.getColumnIndex(FavouriteMovies.COLUMN_ORIGINAL_TITLE)));
+        movie.setGenre_ids(null);
+        movie.setTitle(cursor.getString(cursor.getColumnIndex(FavouriteMovies.COLUMN_TITLE)));
+        movie.setVote_average(cursor.getFloat(cursor.getColumnIndex(FavouriteMovies.COLUMN_VOTE_AVERAGE)));
+        movie.setOverview(cursor.getString(cursor.getColumnIndex(FavouriteMovies.COLUMN_OVERVIEW)));
+        movie.setRelease_date(cursor.getString(cursor.getColumnIndex(FavouriteMovies.COLUMN_RELEASE_DATE)));
+
+        db.close();
+        return movie;
+    }
+
+    public List<Movies> getUserFavMovies() {
         SQLiteDatabase db = this.getWritableDatabase();
         List<Movies> moviesList = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + FavouriteMovies.TABLE_NAME + " WHERE "

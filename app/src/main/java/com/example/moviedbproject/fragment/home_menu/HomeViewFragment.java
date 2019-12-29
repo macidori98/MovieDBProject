@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -205,6 +204,13 @@ public class HomeViewFragment extends Fragment {
                         linearLayoutManager = new LinearLayoutManager(getContext());
                         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
                         mAdapter = new HomeViewRecyclerViewAdapter(getContext(), moviesResponse.getResults(), getActivity().getSupportFragmentManager());
+                        mAdapter.setOnClickListener(new OnItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                FragmentNavigation.getInstance(getContext()).replaceFragment(new DetailScreenFragment(moviesResponse.getResults().get(position)), R.id.fragment_content);
+                                Toast.makeText(getContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                         rvTopMovies.setLayoutManager(linearLayoutManager);
                         rvTopMovies.setAdapter(mAdapter);
                         rvTopMovies.getViewTreeObserver()

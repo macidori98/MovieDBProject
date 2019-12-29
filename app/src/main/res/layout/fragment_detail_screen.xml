@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <WebView
         android:id="@+id/webView_detail_screen_fragment_video"
@@ -10,7 +11,7 @@
         android:layout_height="200dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
@@ -24,15 +25,15 @@
             android:id="@+id/linearLayout_detail_screen_fragment_images"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal">
 
             <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_linearLayout_detail_screen_fragment_images"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp150"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+                android:id="@+id/recyclerView_linearLayout_detail_screen_fragment_images"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp150"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </RelativeLayout>
     </HorizontalScrollView>
@@ -49,10 +50,10 @@
         android:id="@+id/textView_detail_screen_fragment_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="@dimen/dp20"
-        app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="5dp"
+        android:textSize="@dimen/dp20"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
 
     <TextView
@@ -65,9 +66,9 @@
 
     <ImageView
         android:id="@+id/imageView_detail_screen_fragment_favourite"
-        android:background="@color/white"
         android:layout_width="@dimen/dp30"
         android:layout_height="30dp"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/webView_detail_screen_fragment_video"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/favourite" />
@@ -89,7 +90,7 @@
                 android:id="@+id/recyclerView_linearLayout_detail_screen_fragment_related_movies"
                 android:layout_width="wrap_content"
                 android:layout_height="170dp"
-                android:orientation="horizontal"/>
+                android:orientation="horizontal" />
 
         </RelativeLayout>
     </HorizontalScrollView>

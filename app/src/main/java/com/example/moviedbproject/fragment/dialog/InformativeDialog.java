@@ -18,7 +18,7 @@ public class InformativeDialog extends AppCompatDialogFragment {
 
     private String sTitle;
 
-    public InformativeDialog(String title){
+    public InformativeDialog(String title) {
         this.sTitle = title;
     }
 

@@ -30,16 +30,16 @@ public class Image {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public int getUserId() {
         return userId;
     }
 
     public void setUserId(int userId) {
         this.userId = userId;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {

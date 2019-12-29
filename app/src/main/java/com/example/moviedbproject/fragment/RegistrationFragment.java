@@ -47,9 +47,9 @@ public class RegistrationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (isTextLengthEnough(etUsername.getText().toString())
-                && isTextLengthEnough(etPassword.getText().toString())
-                && isTextLengthEnough(etConfirmPassword.getText().toString())){
-                    if (arePasswordsMatching(etPassword.getText().toString(), etConfirmPassword.getText().toString())){
+                        && isTextLengthEnough(etPassword.getText().toString())
+                        && isTextLengthEnough(etConfirmPassword.getText().toString())) {
+                    if (arePasswordsMatching(etPassword.getText().toString(), etConfirmPassword.getText().toString())) {
                         MyAsyncTask myAsyncTask = new MyAsyncTask();
                         myAsyncTask.execute();
                     } else {
@@ -82,7 +82,7 @@ public class RegistrationFragment extends Fragment {
         FragmentNavigation.getInstance(getContext()).replaceFragment(new LoginFragment(), R.id.fragment_content);
     }
 
-    private void initializeElements(View view){
+    private void initializeElements(View view) {
         btnRegistration = view.findViewById(R.id.button_registration);
         etPassword = view.findViewById(R.id.editText_registration_password);
         etConfirmPassword = view.findViewById(R.id.editText_registration_confirm_password);
@@ -90,11 +90,11 @@ public class RegistrationFragment extends Fragment {
         db = new DatabaseHelper(getContext());
     }
 
-    private boolean isTextLengthEnough(String string){
+    private boolean isTextLengthEnough(String string) {
         return string.length() >= 5;
     }
 
-    private boolean arePasswordsMatching(String s1, String s2){
+    private boolean arePasswordsMatching(String s1, String s2) {
         return s1.equals(s2);
     }
 

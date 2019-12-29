@@ -18,7 +18,7 @@ import com.example.moviedbproject.utils.Constant;
 
 import java.util.List;
 
-public class RelatedMoviesAdapter extends RecyclerView.Adapter<RelatedMoviesAdapter.MyViewHolder>{
+public class RelatedMoviesAdapter extends RecyclerView.Adapter<RelatedMoviesAdapter.MyViewHolder> {
 
     private Context context;
     private List<Movies> moviesList;
@@ -52,7 +52,7 @@ public class RelatedMoviesAdapter extends RecyclerView.Adapter<RelatedMoviesAdap
         this.listener = listener;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView ivMovieCover;
         public TextView tvTitle;

@@ -1,20 +1,14 @@
 package com.example.moviedbproject.fragment;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,12 +19,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moviedbproject.R;
-import com.example.moviedbproject.adapter.HomeViewRecyclerViewAdapter;
 import com.example.moviedbproject.adapter.ImagesAdapter;
 import com.example.moviedbproject.adapter.RelatedMoviesAdapter;
 import com.example.moviedbproject.database.DatabaseHelper;
 import com.example.moviedbproject.fragment.dialog.DescriptionDialog;
-import com.example.moviedbproject.fragment.home_menu.HomeViewFragment;
 import com.example.moviedbproject.interfaces.OnItemClickListener;
 import com.example.moviedbproject.interfaces.Service;
 import com.example.moviedbproject.tmdb.NetworkConnection;
@@ -40,8 +32,6 @@ import com.example.moviedbproject.tmdb.model.MoviesResponse;
 import com.example.moviedbproject.tmdb.model.VideoResponse;
 import com.example.moviedbproject.utils.Constant;
 import com.example.moviedbproject.utils.FragmentNavigation;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,13 +46,13 @@ public class DetailScreenFragment extends Fragment {
     private ImageView ivClose, ivFavourite;
     private TextView tvTitle, tvDescription;
     private Movies movie;
-    private LinearLayoutManager linearLayoutManager,linearLayoutManager2;
+    private LinearLayoutManager linearLayoutManager, linearLayoutManager2;
     private RecyclerView rvImages, rvRelatedMovies;
     private boolean bChecked;
     private ImagesAdapter imagesAdapter;
     private RelatedMoviesAdapter relatedMoviesAdapter;
 
-    public DetailScreenFragment(Movies movie){
+    public DetailScreenFragment(Movies movie) {
         this.movie = movie;
     }
 
@@ -81,14 +71,14 @@ public class DetailScreenFragment extends Fragment {
         myAsyncTask.execute();
     }
 
-    private void loadImages(){
+    private void loadImages() {
         Retrofit retrofit = NetworkConnection.getRetrofitClient();
         final Service service = retrofit.create(Service.class);
         Call call = service.getMovieImages(String.valueOf(movie.getId()), Constant.API_KEY);
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
-                if (response.code() == Constant.GET_SUCCESS_CODE){
+                if (response.code() == Constant.GET_SUCCESS_CODE) {
                     ImageResponse imageResponse = (ImageResponse) response.body();
                     imagesAdapter = new ImagesAdapter(getContext(), imageResponse.getBackdrops());
                     rvImages.setAdapter(imagesAdapter);
@@ -104,16 +94,16 @@ public class DetailScreenFragment extends Fragment {
         });
     }
 
-    private void loadVideo(){
+    private void loadVideo() {
         Retrofit retrofit = NetworkConnection.getRetrofitClient();
         final Service service = retrofit.create(Service.class);
         Call call = service.getMovieVideo(String.valueOf(movie.getId()), Constant.API_KEY, "en-US");
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
-                if (response.code() == Constant.GET_SUCCESS_CODE){
+                if (response.code() == Constant.GET_SUCCESS_CODE) {
                     VideoResponse videoResponse = (VideoResponse) response.body();
-                    wvVideo.loadData("<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/"+ videoResponse.getResults().get(0).getKey() +"\" frameborder=\"0\" allowfullscreen=\"allowfullscreen\"></iframe>","text/html" , "utf-8");
+                    wvVideo.loadData("<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/" + videoResponse.getResults().get(0).getKey() + "\" frameborder=\"0\" allowfullscreen=\"allowfullscreen\"></iframe>", "text/html", "utf-8");
                 } else {
                     Toast.makeText(getContext(), R.string.login_fail_query_retrofit, Toast.LENGTH_SHORT).show();
                 }
@@ -126,16 +116,16 @@ public class DetailScreenFragment extends Fragment {
         });
     }
 
-    private void loadRelatedMovies(){
+    private void loadRelatedMovies() {
         Retrofit retrofit = NetworkConnection.getRetrofitClient();
         final Service service = retrofit.create(Service.class);
         Call call = service.getSimilarMovies(String.valueOf(movie.getId()), Constant.API_KEY);
         call.enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) {
-                if (response.code() == Constant.GET_SUCCESS_CODE){
+                if (response.code() == Constant.GET_SUCCESS_CODE) {
                     final MoviesResponse moviesResponse = (MoviesResponse) response.body();
-                    relatedMoviesAdapter = new RelatedMoviesAdapter(getContext(),moviesResponse.getResults());
+                    relatedMoviesAdapter = new RelatedMoviesAdapter(getContext(), moviesResponse.getResults());
                     relatedMoviesAdapter.setOnClickListener(new OnItemClickListener() {
                         @Override
                         public void onItemClick(int position) {
@@ -155,7 +145,7 @@ public class DetailScreenFragment extends Fragment {
         });
     }
 
-    private void initializeElements(View view){
+    private void initializeElements(View view) {
         wvVideo = view.findViewById(R.id.webView_detail_screen_fragment_video);
         wvVideo.getSettings().setJavaScriptEnabled(true);
         bChecked = false;
@@ -188,14 +178,14 @@ public class DetailScreenFragment extends Fragment {
                     FragmentNavigation.getInstance(getContext()).popBackstack();
                 }
             });
-            if (db.isUsersFavMovie(movie)){
+            if (db.isUsersFavMovie(movie)) {
                 bChecked = true;
                 ivFavourite.setImageResource(R.drawable.favouritefull);
             }
             ivFavourite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (bChecked){
+                    if (bChecked) {
                         ivFavourite.setImageResource(R.drawable.favourite);
                         db.deleteFavouriteMovie(movie);
                         bChecked = false;
@@ -206,11 +196,11 @@ public class DetailScreenFragment extends Fragment {
                     }
                 }
             });
-            wvVideo.setWebChromeClient(new WebChromeClient(){
+            wvVideo.setWebChromeClient(new WebChromeClient() {
                 @Override
                 public void onProgressChanged(WebView view, int newProgress) {
                     super.onProgressChanged(view, newProgress);
-                    if (newProgress == 100){
+                    if (newProgress == 100) {
                         dialog.hide();
                     }
                 }

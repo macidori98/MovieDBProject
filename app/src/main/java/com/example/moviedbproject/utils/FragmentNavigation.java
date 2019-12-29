@@ -77,12 +77,12 @@ public class FragmentNavigation extends Fragment {
             return;
         }
 
-        if( getCurrentFragment(mMainActivityFragmentContainer) instanceof RegistrationFragment) {
+        if (getCurrentFragment(mMainActivityFragmentContainer) instanceof RegistrationFragment) {
             popBackstack();
             return;
         }
 
-        if( getCurrentFragment(mMainActivityFragmentContainer) instanceof DetailScreenFragment) {
+        if (getCurrentFragment(mMainActivityFragmentContainer) instanceof DetailScreenFragment) {
             popBackstack();
             return;
         }

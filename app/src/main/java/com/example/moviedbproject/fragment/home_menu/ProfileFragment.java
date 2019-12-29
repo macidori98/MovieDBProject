@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,8 +19,6 @@ import com.example.moviedbproject.database.DatabaseHelper;
 import com.example.moviedbproject.database.model.Image;
 import com.example.moviedbproject.fragment.dialog.ChangePasswordDialog;
 import com.example.moviedbproject.utils.Constant;
-
-import java.net.URI;
 
 public class ProfileFragment extends Fragment {
     public static final String TAG = ProfileFragment.class.getSimpleName();
@@ -58,40 +55,40 @@ public class ProfileFragment extends Fragment {
         btnChangeProfilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(Intent.ACTION_PICK);
+                Intent intent = new Intent(Intent.ACTION_PICK);
                 // Sets the type as image/*. This ensures only components of type image are selected
                 intent.setType("image/*");
                 //We pass an extra array with the accepted mime types. This will ensure only components with these MIME types as targeted.
                 String[] mimeTypes = {"image/jpeg", "image/png"};
-                intent.putExtra(Intent.EXTRA_MIME_TYPES,mimeTypes);
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
                 // Launching the Intent
-                startActivityForResult(intent,1);
+                startActivityForResult(intent, 1);
             }
         });
 
     }
 
     @Override
-    public void onActivityResult(int requestCode,int resultCode,Intent data){
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Result code is RESULT_OK only if the user selects an Image
         if (resultCode == Activity.RESULT_OK)
-            switch (requestCode){
+            switch (requestCode) {
                 case 1:
                     //data.getData returns the content URI for the selected Image
                     selectedImage = data.getData();
                     ivProfilePicture.setImageURI(selectedImage);
                     DatabaseHelper db = new DatabaseHelper(getContext());
-                    if (image != null){
+                    if (image != null) {
                         Image image2 = new Image(image.getId(), String.valueOf(selectedImage), Constant.CURRENT_USER.getId(), null);
                         db.updateImage(image2);
                     } else {
-                        db.insertImage(String.valueOf(selectedImage),null);
+                        db.insertImage(String.valueOf(selectedImage), null);
                     }
                     break;
             }
     }
 
-    private void initializeElements(View view){
+    private void initializeElements(View view) {
         btnChangePassword = view.findViewById(R.id.button_profile_fragment_change_password);
         btnChangeProfilePicture = view.findViewById(R.id.button_profile_fragment_change_profile_picture);
         ivProfilePicture = view.findViewById(R.id.imageView_profile_fragment_image);

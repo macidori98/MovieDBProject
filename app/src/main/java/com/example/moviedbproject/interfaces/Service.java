@@ -6,8 +6,6 @@ import com.example.moviedbproject.tmdb.model.NewToken;
 import com.example.moviedbproject.tmdb.model.VideoResponse;
 
 import retrofit2.Call;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -35,5 +33,5 @@ public interface Service {
     Call<ImageResponse> getMovieImages(@Path("movie_id") String movie_id, @Query("api_key") String api_key);
 
     @GET("/3/movie/{movie_id}/similar")
-    Call<MoviesResponse> getSimilarMovies(@Path("movie_id") String movie_id,@Query("api_key") String api_key);
+    Call<MoviesResponse> getSimilarMovies(@Path("movie_id") String movie_id, @Query("api_key") String api_key);
 }
