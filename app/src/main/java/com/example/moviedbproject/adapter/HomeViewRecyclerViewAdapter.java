@@ -13,8 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.moviedbproject.R;
-import com.example.moviedbproject.fragment.dialog.DetailDialog;
+import com.example.moviedbproject.fragment.dialog.DescriptionDialog;
 import com.example.moviedbproject.fragment.dialog.OriginalSizeCoverPhotoDialog;
+import com.example.moviedbproject.interfaces.OnItemClickListener;
 import com.example.moviedbproject.tmdb.model.Movies;
 import com.example.moviedbproject.utils.Constant;
 
@@ -25,6 +26,7 @@ public class HomeViewRecyclerViewAdapter extends RecyclerView.Adapter<HomeViewRe
     private Context context;
     private FragmentManager fragmentManager;
     private List<Movies> moviesList;
+    private OnItemClickListener listener;
 
     public HomeViewRecyclerViewAdapter(Context context, List<Movies> moviesList, FragmentManager man) {
         this.context = context;
@@ -36,7 +38,7 @@ public class HomeViewRecyclerViewAdapter extends RecyclerView.Adapter<HomeViewRe
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_home_view_element, parent, false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(view, listener);
     }
 
     @Override
@@ -49,7 +51,7 @@ public class HomeViewRecyclerViewAdapter extends RecyclerView.Adapter<HomeViewRe
         holder.tvMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DetailDialog detailDialog = new DetailDialog(moviesList.get(index).getTitle(), moviesList.get(index).getOverview());
+                DescriptionDialog detailDialog = new DescriptionDialog(moviesList.get(index).getTitle(), moviesList.get(index).getOverview());
                 detailDialog.show(fragmentManager, Constant.DETAIL_DIALOG_TAG);
             }
         });
@@ -62,6 +64,10 @@ public class HomeViewRecyclerViewAdapter extends RecyclerView.Adapter<HomeViewRe
         });
     }
 
+    public void setOnClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     @Override
     public int getItemCount() {
         return moviesList.size();
@@ -72,12 +78,23 @@ public class HomeViewRecyclerViewAdapter extends RecyclerView.Adapter<HomeViewRe
         public ImageView imgCoverPhoto;
         public TextView tvTitle, tvDescription, tvMore;
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             tvMore = itemView.findViewById(R.id.textView_recyclerview_home_view_more);
             imgCoverPhoto = itemView.findViewById(R.id.imageView_recyclerview_home_view_cover_photo);
             tvTitle = itemView.findViewById(R.id.textView_recyclerview_home_view_title);
             tvDescription = itemView.findViewById(R.id.textView_recyclerview_home_view_description);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 }

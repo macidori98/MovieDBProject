@@ -22,10 +22,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moviedbproject.R;
 import com.example.moviedbproject.adapter.HomeViewRecyclerViewAdapter;
+import com.example.moviedbproject.fragment.DetailScreenFragment;
+import com.example.moviedbproject.interfaces.OnItemClickListener;
 import com.example.moviedbproject.interfaces.Service;
 import com.example.moviedbproject.tmdb.NetworkConnection;
 import com.example.moviedbproject.tmdb.model.MoviesResponse;
 import com.example.moviedbproject.utils.Constant;
+import com.example.moviedbproject.utils.FragmentNavigation;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -89,7 +92,6 @@ public class HomeViewFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-
         }
 
         @Override
@@ -107,6 +109,13 @@ public class HomeViewFragment extends Fragment {
                         linearLayoutManager = new LinearLayoutManager(getContext());
                         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
                         mAdapter = new HomeViewRecyclerViewAdapter(getContext(), moviesResponse.getResults(), getActivity().getSupportFragmentManager());
+                        mAdapter.setOnClickListener(new OnItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                FragmentNavigation.getInstance(getContext()).replaceFragment(new DetailScreenFragment(moviesResponse.getResults().get(position)), R.id.fragment_content);
+                                Toast.makeText(getContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                         rvTopMovies.setLayoutManager(linearLayoutManager);
                         rvTopMovies.setAdapter(mAdapter);
                         rvTopMovies.getViewTreeObserver()

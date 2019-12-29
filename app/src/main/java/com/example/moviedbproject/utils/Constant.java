@@ -6,7 +6,7 @@ import com.example.moviedbproject.tmdb.model.Movies;
 public class Constant {
     public static final String BASE_URL = "https://api.themoviedb.org";
     public static final String BASE_URL_IMAGE = "https://image.tmdb.org/t/p/";
-    public static final String BASE_URL_VIDEO = "https://www.youtube.com/watch";
+    public static final String BASE_URL_VIDEO = "https://www.youtube.com/watch?v=";
     public static final String API_KEY = "55ad3422681300f02641616898bdbee0";
     public static final String DEV_TOKEN = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1NWFkMzQyMjY4MTMwMGYwMjY0MTYxNjg5OGJkYmVlMCIsInN1YiI6IjVlMDQ2NzgzNGMxZDlhMDAxNWRiZmE1MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7N8vGrQ9oxUyaQljW2WfrUoDxJ2Hjeb63fRTCsnDN4I";
     public static final int GET_SUCCESS_CODE = 200;

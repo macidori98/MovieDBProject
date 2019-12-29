@@ -16,11 +16,11 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import com.example.moviedbproject.R;
 import com.example.moviedbproject.utils.Constant;
 
-public class DetailDialog extends AppCompatDialogFragment {
+public class DescriptionDialog extends AppCompatDialogFragment {
     private String sDescription, sTitle;
     private TextView tvDescription;
 
-    public DetailDialog(String sTitle, String sDescription) {
+    public DescriptionDialog(String sTitle, String sDescription) {
         this.sDescription = sDescription;
         this.sTitle = sTitle;
     }

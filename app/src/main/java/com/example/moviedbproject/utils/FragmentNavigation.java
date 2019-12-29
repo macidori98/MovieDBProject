@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.moviedbproject.MainActivity;
 import com.example.moviedbproject.R;
+import com.example.moviedbproject.fragment.DetailScreenFragment;
 import com.example.moviedbproject.fragment.LoginFragment;
 import com.example.moviedbproject.fragment.RegistrationFragment;
 
@@ -80,14 +81,14 @@ public class FragmentNavigation extends Fragment {
             popBackstack();
             return;
         }
-/*
-        if( getCurrentFragment(mMainActivityFragmentContainer) instanceof AdminGroupQuestionFragment) {
+
+        if( getCurrentFragment(mMainActivityFragmentContainer) instanceof DetailScreenFragment) {
             popBackstack();
             return;
         }
 
         // Other cases:
-        activity.moveTaskToBack(true);/*/
+        activity.moveTaskToBack(true);
     }
 
     private void doublePressExit(MainActivity activity) {

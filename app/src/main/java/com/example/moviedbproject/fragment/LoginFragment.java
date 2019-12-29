@@ -101,7 +101,6 @@ public class LoginFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
             Retrofit retrofit = NetworkConnection.getRetrofitClient();
             final Service service = retrofit.create(Service.class);
-
             Call call = service.getNewToken(Constant.API_KEY);
             call.enqueue(new Callback() {
                 @Override

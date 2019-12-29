@@ -5,11 +5,11 @@ import java.util.List;
 
 public class VideoResponse {
     private long id;
-    private List<Video> videoList = new ArrayList<>();
+    private List<Video> results = new ArrayList<>();
 
-    public VideoResponse(long id, List<Video> videoList) {
+    public VideoResponse(long id, List<Video> results) {
         this.id = id;
-        this.videoList = videoList;
+        this.results = results;
     }
 
     public long getId() {
@@ -20,11 +20,11 @@ public class VideoResponse {
         this.id = id;
     }
 
-    public List<Video> getVideoList() {
-        return videoList;
+    public List<Video> getResults() {
+        return results;
     }
 
-    public void setVideoList(List<Video> videoList) {
-        this.videoList = videoList;
+    public void setResults(List<Video> video) {
+        this.results = video;
     }
 }
