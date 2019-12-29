@@ -6,10 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.moviedbproject.database.model.FavouriteMovies;
 import com.example.moviedbproject.database.model.Image;
 import com.example.moviedbproject.database.model.User;
+import com.example.moviedbproject.tmdb.model.Movies;
 import com.example.moviedbproject.utils.Constant;
 
+import java.nio.file.attribute.FileAttributeView;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,12 +31,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(User.CREATE_TABLE);
         sqLiteDatabase.execSQL(Image.CREATE_TABLE);
+        sqLiteDatabase.execSQL(FavouriteMovies.CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + User.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + Image.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + FavouriteMovies.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 
@@ -55,6 +60,39 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         // return newly inserted row id
         return id;
+    }
+
+    public long insertFavouriteMovie(Movies movie){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(FavouriteMovies.COLUMN_POPULARITY, movie.getPopularity());
+        values.put(FavouriteMovies.COLUMN_VOTE_COUNT, movie.getVote_count());
+        values.put(FavouriteMovies.COLUMN_VIDEO, movie.isVideo());
+        values.put(FavouriteMovies.COLUMN_POSTER_PATH, movie.getPoster_path());
+        values.put(FavouriteMovies.COLUMN_MOVIE_ID, movie.getId());
+        values.put(FavouriteMovies.COLUMN_ADULT, movie.isAdult());
+        values.put(FavouriteMovies.COLUMN_BACKDROP_PATH, movie.getBackdrop_path());
+        values.put(FavouriteMovies.COLUMN_ORIGINAL_LANGUAGE, movie.getOriginal_language());
+        values.put(FavouriteMovies.COLUMN_ORIGINAL_TITLE, movie.getOriginal_title());
+        values.put(FavouriteMovies.COLUMN_GENRE_IDS, String.valueOf(movie.getGenre_ids()));
+        values.put(FavouriteMovies.COLUMN_TITLE, movie.getTitle());
+        values.put(FavouriteMovies.COLUMN_VOTE_AVERAGE, movie.getVote_average());
+        values.put(FavouriteMovies.COLUMN_OVERVIEW, movie.getOverview());
+        values.put(FavouriteMovies.COLUMN_RELEASE_DATE, movie.getRelease_date());
+        values.put(FavouriteMovies.COLUMN_USER_ID, Constant.CURRENT_USER.getId());
+
+        long id = db.insert(FavouriteMovies.TABLE_NAME, null, values);
+        db.close();
+        return id;
+    }
+
+    public void deleteFavouriteMovie(Movies movie) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(FavouriteMovies.TABLE_NAME, FavouriteMovies.COLUMN_MOVIE_ID + " = ? AND "
+                + FavouriteMovies.COLUMN_USER_ID + " = ?",
+                new String[]{String.valueOf(movie.getId()), String.valueOf(Constant.CURRENT_USER.getId())});
+        db.close();
     }
 
     public long insertImage(String name, byte[] image){
@@ -131,6 +169,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         );
         cursor.close();
         return user;
+    }
+
+    public boolean isUsersFavMovie(Movies movie){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "SELECT * FROM " + FavouriteMovies.TABLE_NAME + " WHERE "
+                + FavouriteMovies.COLUMN_USER_ID + " = " + String.valueOf(Constant.CURRENT_USER.getId())
+                + " AND " + FavouriteMovies.COLUMN_MOVIE_ID + " = " + String.valueOf(movie.getId());
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if(cursor.getCount() <= 0) {
+            db.close();
+            return false;
+        }
+        db.close();
+        return true;
+    }
+
+    public List<Movies> getUserFavMovies(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<Movies> moviesList = new ArrayList<>();
+        String selectQuery = "SELECT * FROM " + FavouriteMovies.TABLE_NAME + " WHERE "
+                + FavouriteMovies.COLUMN_USER_ID + " = " + String.valueOf(Constant.CURRENT_USER.getId());
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Movies movie = new Movies();
+                movie.setPopularity(cursor.getDouble(cursor.getColumnIndex(FavouriteMovies.COLUMN_POPULARITY)));
+                movie.setVote_count(cursor.getLong(cursor.getColumnIndex(FavouriteMovies.COLUMN_VOTE_COUNT)));
+                movie.setVideo(false);
+                movie.setPoster_path(cursor.getString(cursor.getColumnIndex(FavouriteMovies.COLUMN_POSTER_PATH)));
+                movie.setId(cursor.getLong(cursor.getColumnIndex(FavouriteMovies.COLUMN_MOVIE_ID)));
+                movie.setAdult(false);
+                movie.setBackdrop_path(cursor.getString(cursor.getColumnIndex(FavouriteMovies.COLUMN_BACKDROP_PATH)));
+                movie.setOriginal_language(cursor.getString(cursor.getColumnIndex(FavouriteMovies.COLUMN_ORIGINAL_LANGUAGE)));
+                movie.setOriginal_title(cursor.getString(cursor.getColumnIndex(FavouriteMovies.COLUMN_ORIGINAL_TITLE)));
+                movie.setGenre_ids(null);
+                movie.setTitle(cursor.getString(cursor.getColumnIndex(FavouriteMovies.COLUMN_TITLE)));
+                movie.setVote_average(cursor.getFloat(cursor.getColumnIndex(FavouriteMovies.COLUMN_VOTE_AVERAGE)));
+                movie.setOverview(cursor.getString(cursor.getColumnIndex(FavouriteMovies.COLUMN_OVERVIEW)));
+                movie.setRelease_date(cursor.getString(cursor.getColumnIndex(FavouriteMovies.COLUMN_RELEASE_DATE)));
+                moviesList.add(movie);
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+        return moviesList;
     }
 
     public List<User> getAllUsers() {

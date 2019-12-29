@@ -1,13 +1,20 @@
 package com.example.moviedbproject.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,9 +25,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moviedbproject.R;
+import com.example.moviedbproject.adapter.HomeViewRecyclerViewAdapter;
 import com.example.moviedbproject.adapter.ImagesAdapter;
 import com.example.moviedbproject.adapter.RelatedMoviesAdapter;
+import com.example.moviedbproject.database.DatabaseHelper;
 import com.example.moviedbproject.fragment.dialog.DescriptionDialog;
+import com.example.moviedbproject.fragment.home_menu.HomeViewFragment;
 import com.example.moviedbproject.interfaces.OnItemClickListener;
 import com.example.moviedbproject.interfaces.Service;
 import com.example.moviedbproject.tmdb.NetworkConnection;
@@ -30,6 +40,8 @@ import com.example.moviedbproject.tmdb.model.MoviesResponse;
 import com.example.moviedbproject.tmdb.model.VideoResponse;
 import com.example.moviedbproject.utils.Constant;
 import com.example.moviedbproject.utils.FragmentNavigation;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -65,24 +77,8 @@ public class DetailScreenFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        tvTitle.setText(movie.getTitle());
-        tvDescription.setText(movie.getOverview());
-        ivClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentNavigation.getInstance(getContext()).popBackstack();
-            }
-        });
-        ivFavourite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ivFavourite.setImageResource(R.drawable.favouritefull);
-            }
-        });
-        loadVideo();
-        loadImages();
-        loadRelatedMovies();
-
+        MyAsyncTask myAsyncTask = new MyAsyncTask();
+        myAsyncTask.execute();
     }
 
     private void loadImages(){
@@ -162,9 +158,6 @@ public class DetailScreenFragment extends Fragment {
     private void initializeElements(View view){
         wvVideo = view.findViewById(R.id.webView_detail_screen_fragment_video);
         wvVideo.getSettings().setJavaScriptEnabled(true);
-        wvVideo.setWebChromeClient(new WebChromeClient() {
-            //                Log.d("","");
-        } );
         bChecked = false;
         rvImages = view.findViewById(R.id.recyclerView_linearLayout_detail_screen_fragment_images);
         linearLayoutManager = new LinearLayoutManager(getContext());
@@ -178,5 +171,67 @@ public class DetailScreenFragment extends Fragment {
         tvDescription = view.findViewById(R.id.textView_detail_screen_fragment_description);
         rvRelatedMovies = view.findViewById(R.id.recyclerView_linearLayout_detail_screen_fragment_related_movies);
         rvRelatedMovies.setLayoutManager(linearLayoutManager2);
+    }
+
+    private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private ProgressDialog dialog = new ProgressDialog(getContext());
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            final DatabaseHelper db = new DatabaseHelper(getContext());
+            tvTitle.setText(movie.getTitle());
+            tvDescription.setText(movie.getOverview());
+            ivClose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    FragmentNavigation.getInstance(getContext()).popBackstack();
+                }
+            });
+            if (db.isUsersFavMovie(movie)){
+                bChecked = true;
+                ivFavourite.setImageResource(R.drawable.favouritefull);
+            }
+            ivFavourite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (bChecked){
+                        ivFavourite.setImageResource(R.drawable.favourite);
+                        db.deleteFavouriteMovie(movie);
+                        bChecked = false;
+                    } else {
+                        db.insertFavouriteMovie(movie);
+                        ivFavourite.setImageResource(R.drawable.favouritefull);
+                        bChecked = true;
+                    }
+                }
+            });
+            wvVideo.setWebChromeClient(new WebChromeClient(){
+                @Override
+                public void onProgressChanged(WebView view, int newProgress) {
+                    super.onProgressChanged(view, newProgress);
+                    if (newProgress == 100){
+                        dialog.hide();
+                    }
+                }
+            });
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            loadVideo();
+            loadImages();
+            loadRelatedMovies();
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            dialog.setMessage(Constant.GET_DATA);
+            dialog.setCancelable(false);
+            dialog.setInverseBackgroundForced(false);
+            dialog.show();
+        }
     }
 }
