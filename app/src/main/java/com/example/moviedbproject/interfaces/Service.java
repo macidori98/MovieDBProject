@@ -33,4 +33,7 @@ public interface Service {
 
     @GET("/3/movie/{movie_id}/images")
     Call<ImageResponse> getMovieImages(@Path("movie_id") String movie_id, @Query("api_key") String api_key);
+
+    @GET("/3/movie/{movie_id}/similar")
+    Call<MoviesResponse> getSimilarMovies(@Path("movie_id") String movie_id,@Query("api_key") String api_key);
 }

@@ -49,7 +49,10 @@
         android:id="@+id/textView_detail_screen_fragment_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="@dimen/dp20"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="5dp"
         app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
 
     <TextView
@@ -71,7 +74,7 @@
 
     <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="170dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_detail_screen_fragment_description">
@@ -82,7 +85,11 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_linearLayout_detail_screen_fragment_related_movies"
+                android:layout_width="wrap_content"
+                android:layout_height="170dp"
+                android:orientation="horizontal"/>
 
         </RelativeLayout>
     </HorizontalScrollView>
