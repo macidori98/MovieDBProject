@@ -66,6 +66,42 @@ public class FavouritesFragment extends Fragment {
         linLayoutagination = view.findViewById(R.id.linearLayout_fragment_favourite_for_pagination);
     }
 
+    private void favouritePagination(final List<Movies> showingMovieList){
+        int iMovieNumber = moviesList.size();
+        int iPageNumber = 1;
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+        );
+        params.setMargins(5, 0, 5, 0);
+        for (int i = 0; i < iMovieNumber; i = i+20){
+            final int iIndex = iPageNumber;
+            Button btn = new Button(getContext());
+            btn.setText(String.valueOf(iPageNumber));
+            btn.setLayoutParams(params);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showingMovieList.removeAll(showingMovieList);
+                    for (int j = (20*iIndex-20); j < 20*iIndex && j < moviesList.size(); ++j ){
+                        showingMovieList.add(moviesList.get(j));
+                    }
+                    mAdapter = new HomeViewRecyclerViewAdapter(getContext(), showingMovieList, getFragmentManager());
+                    rvFavMovies.setAdapter(mAdapter);
+                    mAdapter.setOnClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(int position) {
+                            Toast.makeText(getContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+                            FragmentNavigation.getInstance(getContext()).replaceFragment(new DetailScreenFragment(moviesList.get(position)), R.id.fragment_content);
+                        }
+                    });
+                }
+            });
+            linLayoutagination.addView(btn);
+            iPageNumber++;
+        }
+    }
+
     private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
 
         private ProgressDialog dialog = new ProgressDialog(getContext());
@@ -95,39 +131,7 @@ public class FavouritesFragment extends Fragment {
                     mySearchAsyncTask.execute();
                 }
             });
-            int iMovieNumber = moviesList.size();
-            int iPageNumber = 1;
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.MATCH_PARENT
-            );
-            params.setMargins(5, 0, 5, 0);
-            for (int i = 0; i < iMovieNumber; i = i+20){
-                final int iIndex = iPageNumber;
-                Button btn = new Button(getContext());
-                btn.setText(String.valueOf(iPageNumber));
-                btn.setLayoutParams(params);
-                btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showingMovieList.removeAll(showingMovieList);
-                        for (int j = (20*iIndex-20); j < 20*iIndex && j < moviesList.size(); ++j ){
-                            showingMovieList.add(moviesList.get(j));
-                        }
-                        mAdapter = new HomeViewRecyclerViewAdapter(getContext(), showingMovieList, getFragmentManager());
-                        rvFavMovies.setAdapter(mAdapter);
-                        mAdapter.setOnClickListener(new OnItemClickListener() {
-                            @Override
-                            public void onItemClick(int position) {
-                                Toast.makeText(getContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
-                                FragmentNavigation.getInstance(getContext()).replaceFragment(new DetailScreenFragment(moviesList.get(position)), R.id.fragment_content);
-                            }
-                        });
-                    }
-                });
-                linLayoutagination.addView(btn);
-                iPageNumber++;
-            }
+            favouritePagination(showingMovieList);
             dialog.hide();
         }
 
