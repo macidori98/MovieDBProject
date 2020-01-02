@@ -6,9 +6,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,6 +40,7 @@ public class FavouritesFragment extends Fragment {
     private List<Movies> moviesList;
     private ImageButton ibSearch;
     private EditText etSearch;
+    private LinearLayout linLayoutagination;
 
     @Nullable
     @Override
@@ -61,6 +63,7 @@ public class FavouritesFragment extends Fragment {
         etSearch = view.findViewById(R.id.editText_fav_search_bar);
         db = new DatabaseHelper(getContext());
         moviesList = new ArrayList<>();
+        linLayoutagination = view.findViewById(R.id.linearLayout_fragment_favourite_for_pagination);
     }
 
     private class MyAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -72,7 +75,11 @@ public class FavouritesFragment extends Fragment {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
             linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
             rvFavMovies.setLayoutManager(linearLayoutManager);
-            mAdapter = new HomeViewRecyclerViewAdapter(getContext(), moviesList, getFragmentManager());
+            final List<Movies> showingMovieList = new ArrayList<>();
+            for (int i = 0; i < 20 && i < moviesList.size(); ++i){
+                showingMovieList.add(moviesList.get(i));
+            }
+            mAdapter = new HomeViewRecyclerViewAdapter(getContext(), showingMovieList, getFragmentManager());
             rvFavMovies.setAdapter(mAdapter);
             mAdapter.setOnClickListener(new OnItemClickListener() {
                 @Override
@@ -88,6 +95,39 @@ public class FavouritesFragment extends Fragment {
                     mySearchAsyncTask.execute();
                 }
             });
+            int iMovieNumber = moviesList.size();
+            int iPageNumber = 1;
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT
+            );
+            params.setMargins(5, 0, 5, 0);
+            for (int i = 0; i < iMovieNumber; i = i+20){
+                final int iIndex = iPageNumber;
+                Button btn = new Button(getContext());
+                btn.setText(String.valueOf(iPageNumber));
+                btn.setLayoutParams(params);
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showingMovieList.removeAll(showingMovieList);
+                        for (int j = (20*iIndex-20); j < 20*iIndex && j < moviesList.size(); ++j ){
+                            showingMovieList.add(moviesList.get(j));
+                        }
+                        mAdapter = new HomeViewRecyclerViewAdapter(getContext(), showingMovieList, getFragmentManager());
+                        rvFavMovies.setAdapter(mAdapter);
+                        mAdapter.setOnClickListener(new OnItemClickListener() {
+                            @Override
+                            public void onItemClick(int position) {
+                                Toast.makeText(getContext(), String.valueOf(position), Toast.LENGTH_SHORT).show();
+                                FragmentNavigation.getInstance(getContext()).replaceFragment(new DetailScreenFragment(moviesList.get(position)), R.id.fragment_content);
+                            }
+                        });
+                    }
+                });
+                linLayoutagination.addView(btn);
+                iPageNumber++;
+            }
             dialog.hide();
         }
 
@@ -130,7 +170,6 @@ public class FavouritesFragment extends Fragment {
                     FragmentNavigation.getInstance(getContext()).replaceFragment(new DetailScreenFragment(moviesList.get(position)), R.id.fragment_content);
                 }
             });
-
             dialog.hide();
         }
 

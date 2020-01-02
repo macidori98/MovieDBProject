@@ -36,5 +36,19 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_favourites_fav_movies"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="500dp">
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <HorizontalScrollView
+        android:id="@+id/scrollView_fragment_favourite_for_pagination"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp50">
+
+        <LinearLayout
+            android:id="@+id/linearLayout_fragment_favourite_for_pagination"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" />
+
+    </HorizontalScrollView>
 </LinearLayout>
