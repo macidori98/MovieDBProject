@@ -38,7 +38,7 @@ public class DescriptionDialog extends AppCompatDialogFragment {
     }
 
     private void insertDescription(AlertDialog.Builder builder, View view) {
-        builder.setView(view).setTitle(Constant.DESCRIPTION + (sTitle))
+        builder.setView(view).setTitle(sTitle)
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {

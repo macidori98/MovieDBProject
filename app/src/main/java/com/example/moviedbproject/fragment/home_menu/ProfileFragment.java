@@ -56,16 +56,12 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
-                // Sets the type as image/*. This ensures only components of type image are selected
                 intent.setType("image/*");
-                //We pass an extra array with the accepted mime types. This will ensure only components with these MIME types as targeted.
                 String[] mimeTypes = {"image/jpeg", "image/png"};
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-                // Launching the Intent
                 startActivityForResult(intent, 1);
             }
         });
-
     }
 
     @Override
